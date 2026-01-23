@@ -1,0 +1,144 @@
+# MV 分镜脚本示例
+# 主题：小宇宙觉醒（圣斗士星矢风格）
+
+meta:
+  title: "小宇宙觉醒"
+  style: "anime-hype"
+  duration: 55
+  resolution: "1080x1920"
+  fps: 30
+
+music:
+  source: "suno"
+  prompt: "epic anime battle theme, orchestral, intense drums, heroic melody, 128bpm, japanese style"
+  file: null
+  bpm: null
+  beats: []
+
+scenes:
+  # 开场标题 (0-5秒)
+  - id: "intro"
+    start: 0
+    end: 5
+    type: "title"
+    content:
+      text: "小宇宙觉醒"
+      subtitle: "COSMOS AWAKENING"
+    visual:
+      source: "auto"
+      prompt: "cosmic explosion, galaxy forming, golden light rays, epic scale, anime style"
+      stock_keywords: ["cosmos", "galaxy", "explosion", "light"]
+      quality_priority: "high"
+      allow_ai_fallback: true
+      file: null
+    animation: "zoom-in"
+    transition: "flash"
+    beat_sync: false
+
+  # 战士登场 (5-12秒)
+  - id: "hero_intro"
+    start: 5
+    end: 12
+    type: "action"
+    content:
+      lyrics: "燃烧吧"
+    visual:
+      source: "auto"
+      prompt: "anime warrior in golden armor, standing pose, dramatic lighting, saint seiya style"
+      stock_keywords: ["warrior", "hero", "armor", "gold"]
+      quality_priority: "high"
+      allow_ai_fallback: true
+      file: null
+    animation: "shake"
+    transition: "none"
+    beat_sync: true
+
+  # 能量聚集 (12-20秒)
+  - id: "power_up_1"
+    start: 12
+    end: 20
+    type: "action"
+    content:
+      lyrics: "小宇宙"
+    visual:
+      source: "auto"
+      prompt: "energy aura gathering, golden particles, cosmic background, power charging, anime style"
+      stock_keywords: ["energy", "particles", "golden", "aura"]
+      quality_priority: "high"
+      allow_ai_fallback: true
+      file: null
+    animation: "zoom-in"
+    transition: "cross-fade"
+    beat_sync: true
+
+  # 爆发瞬间 (20-28秒)
+  - id: "explosion"
+    start: 20
+    end: 28
+    type: "action"
+    content:
+      lyrics: "奇迹终将降临"
+    visual:
+      source: "stock"
+      prompt: null
+      stock_keywords: ["explosion", "energy burst", "light rays", "impact"]
+      quality_priority: "high"
+      allow_ai_fallback: true
+      file: null
+      media_type: "video"
+    animation: "shake"
+    transition: "flash"
+    beat_sync: true
+
+  # 战斗场面 (28-38秒)
+  - id: "battle"
+    start: 28
+    end: 38
+    type: "action"
+    visual:
+      source: "auto"
+      prompt: "epic anime battle scene, two warriors clashing, energy waves, dynamic action pose"
+      stock_keywords: ["battle", "fight", "action", "clash"]
+      quality_priority: "high"
+      allow_ai_fallback: true
+      file: null
+    animation: "speed-lines"
+    transition: "impact-frame"
+    beat_sync: true
+
+  # 情感桥段 (38-48秒)
+  - id: "emotional"
+    start: 38
+    end: 48
+    type: "action"
+    content:
+      lyrics: "为了守护重要的人"
+    visual:
+      source: "auto"
+      prompt: "anime warrior looking at stars, peaceful moment, hopeful expression, night sky"
+      stock_keywords: ["stars", "night sky", "peaceful", "hope"]
+      quality_priority: "high"
+      allow_ai_fallback: true
+      file: null
+    animation: "ken-burns"
+    transition: "fade"
+    beat_sync: false
+
+  # 终结画面 (48-55秒)
+  - id: "finale"
+    start: 48
+    end: 55
+    type: "title"
+    content:
+      text: "小宇宙觉醒"
+      subtitle: "THE END"
+    visual:
+      source: "auto"
+      prompt: "hero silhouette against sunrise, golden armor glowing, victorious pose, anime style"
+      stock_keywords: ["sunrise", "silhouette", "victory", "hero"]
+      quality_priority: "high"
+      allow_ai_fallback: true
+      file: null
+    animation: "zoom-out"
+    transition: "fade"
+    beat_sync: false
