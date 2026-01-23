@@ -1,0 +1,198 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MV Storyboard Schema",
+  "description": "分镜脚本数据结构定义",
+  "type": "object",
+  "required": ["meta", "music", "scenes"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["title", "style", "duration", "resolution", "fps"],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "MV 标题"
+        },
+        "style": {
+          "type": "string",
+          "enum": ["anime-hype", "cyberpunk", "lyric"],
+          "description": "风格模板"
+        },
+        "duration": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 120,
+          "description": "总时长（秒）"
+        },
+        "resolution": {
+          "type": "string",
+          "enum": ["1080x1920", "720x1280"],
+          "default": "1080x1920",
+          "description": "分辨率（宽x高）"
+        },
+        "fps": {
+          "type": "integer",
+          "enum": [24, 30, 60],
+          "default": 30,
+          "description": "帧率"
+        }
+      }
+    },
+    "music": {
+      "type": "object",
+      "required": ["source"],
+      "properties": {
+        "source": {
+          "type": "string",
+          "enum": ["suno", "local", "none"],
+          "description": "音乐来源"
+        },
+        "prompt": {
+          "type": "string",
+          "description": "Suno 生成提示词"
+        },
+        "file": {
+          "type": ["string", "null"],
+          "description": "音乐文件路径"
+        },
+        "bpm": {
+          "type": ["integer", "null"],
+          "description": "节拍速度"
+        },
+        "beats": {
+          "type": "array",
+          "items": { "type": "number" },
+          "description": "节拍时间点数组"
+        }
+      }
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "start", "end", "type", "visual"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "场景唯一标识"
+          },
+          "start": {
+            "type": "number",
+            "minimum": 0,
+            "description": "开始时间（秒）"
+          },
+          "end": {
+            "type": "number",
+            "minimum": 0,
+            "description": "结束时间（秒）"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["title", "action", "transition", "lyrics"],
+            "description": "场景类型"
+          },
+          "content": {
+            "type": "object",
+            "properties": {
+              "text": {
+                "type": "string",
+                "description": "标题文字"
+              },
+              "subtitle": {
+                "type": "string",
+                "description": "副标题"
+              },
+              "lyrics": {
+                "type": "string",
+                "description": "歌词文字"
+              }
+            }
+          },
+          "visual": {
+            "type": "object",
+            "required": ["source"],
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": ["auto", "ai", "stock", "user"],
+                "description": "素材来源"
+              },
+              "prompt": {
+                "type": "string",
+                "description": "AI 生成提示词"
+              },
+              "stock_keywords": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "素材库搜索关键词"
+              },
+              "quality_priority": {
+                "type": "string",
+                "enum": ["high", "medium", "low"],
+                "default": "high",
+                "description": "质量优先级"
+              },
+              "allow_ai_fallback": {
+                "type": "boolean",
+                "default": true,
+                "description": "是否允许 AI 生成兜底"
+              },
+              "file": {
+                "type": ["string", "null"],
+                "description": "素材文件路径"
+              },
+              "media_type": {
+                "type": "string",
+                "enum": ["image", "video"],
+                "default": "image",
+                "description": "素材类型"
+              }
+            }
+          },
+          "animation": {
+            "type": "string",
+            "enum": [
+              "none",
+              "zoom-in",
+              "zoom-out",
+              "pan-left",
+              "pan-right",
+              "pan-up",
+              "pan-down",
+              "shake",
+              "flash",
+              "ken-burns",
+              "speed-lines",
+              "rotate"
+            ],
+            "default": "none",
+            "description": "动画效果"
+          },
+          "transition": {
+            "type": "string",
+            "enum": [
+              "none",
+              "fade",
+              "cross-fade",
+              "flash",
+              "wipe-left",
+              "wipe-right",
+              "wipe-diagonal",
+              "impact-frame",
+              "glitch",
+              "pixelate"
+            ],
+            "default": "none",
+            "description": "转场效果"
+          },
+          "beat_sync": {
+            "type": "boolean",
+            "default": false,
+            "description": "是否同步节拍"
+          }
+        }
+      }
+    }
+  }
+}
