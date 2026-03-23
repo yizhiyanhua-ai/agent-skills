@@ -3,7 +3,7 @@
 调用 Remotion 将分镜脚本渲染为最终视频
 """
 import json
-import os
+import shutil
 import subprocess
 from pathlib import Path
 from typing import Dict, Optional
@@ -18,7 +18,9 @@ class Renderer:
     def __init__(self):
         self.remotion_dir = REMOTION_DIR
         self.output_dir = OUTPUT_DIR
+        self.public_dir = REMOTION_DIR / "public"
         self.output_dir.mkdir(exist_ok=True)
+        self.public_dir.mkdir(exist_ok=True)
         self._check_remotion()
 
     def _check_remotion(self):
@@ -100,19 +102,62 @@ class Renderer:
         storyboard: Dict,
         assets: Dict[str, str],
     ) -> Dict:
-        """将素材路径注入分镜脚本"""
+        """将素材路径注入分镜脚本，并复制素材到 public 目录"""
         result = storyboard.copy()
         result["scenes"] = []
+
+        # 创建素材子目录
+        assets_dir = self.public_dir / "assets"
+        assets_dir.mkdir(exist_ok=True)
 
         for scene in storyboard.get("scenes", []):
             scene_copy = scene.copy()
             scene_id = scene["id"]
 
-            if scene_id in assets and assets[scene_id]:
-                scene_copy["visual"] = scene.get("visual", {}).copy()
-                scene_copy["visual"]["file"] = assets[scene_id]
+            # DJ 场景是程序化生成的，不需要素材文件
+            # video_mix 场景需要视频素材文件
+            if scene.get("type") == "dj" or scene.get("visual", {}).get("source") == "programmatic":
+                result["scenes"].append(scene_copy)
+                continue
+
+            # video_mix 场景需要视频文件
+            if scene.get("type") == "video_mix":
+                if scene_id in assets and assets[scene_id] and assets[scene_id] != "programmatic":
+                    src_path = Path(assets[scene_id])
+                    if src_path.exists():
+                        # 复制视频素材到 public/assets 目录
+                        dest_name = f"{scene_id}_{src_path.name}"
+                        dest_path = assets_dir / dest_name
+                        shutil.copy2(src_path, dest_path)
+
+                        # 使用相对于 public 的路径
+                        scene_copy["visual"] = scene.get("visual", {}).copy()
+                        scene_copy["visual"]["file"] = f"assets/{dest_name}"
+                result["scenes"].append(scene_copy)
+                continue
+
+            if scene_id in assets and assets[scene_id] and assets[scene_id] != "programmatic":
+                src_path = Path(assets[scene_id])
+                if src_path.exists():
+                    # 复制素材到 public/assets 目录
+                    dest_name = f"{scene_id}_{src_path.name}"
+                    dest_path = assets_dir / dest_name
+                    shutil.copy2(src_path, dest_path)
+
+                    # 使用相对于 public 的路径
+                    scene_copy["visual"] = scene.get("visual", {}).copy()
+                    scene_copy["visual"]["file"] = f"assets/{dest_name}"
 
             result["scenes"].append(scene_copy)
+
+        # 处理音乐文件
+        if "music" in storyboard and storyboard["music"].get("file"):
+            music_src = Path(storyboard["music"]["file"])
+            if music_src.exists():
+                music_dest = self.public_dir / music_src.name
+                shutil.copy2(music_src, music_dest)
+                result["music"] = storyboard["music"].copy()
+                result["music"]["file"] = music_src.name
 
         return result
 

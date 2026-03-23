@@ -3,3 +3,8 @@ __pycache__/
 .idea/
 .vscode/
 .worktrees/
+node_modules/
+.cache/
+*.zip
+*.jpg
+*.png

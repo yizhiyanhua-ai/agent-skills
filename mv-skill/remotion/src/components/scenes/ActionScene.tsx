@@ -6,6 +6,7 @@ import {
   useCurrentFrame,
   useVideoConfig,
   interpolate,
+  staticFile,
 } from "remotion";
 import { Visual, AnimationType, StyleConfig } from "../../types";
 import { applyAnimation } from "../animations/animationUtils";
@@ -42,10 +43,13 @@ export const ActionScene: React.FC<ActionSceneProps> = ({
   const isVideo = visual.media_type === "video" ||
     (visual.file && (visual.file.endsWith(".mp4") || visual.file.endsWith(".mov")));
 
+  // 获取媒体文件路径
+  const mediaSrc = visual.file ? staticFile(visual.file) : null;
+
   return (
     <AbsoluteFill>
       {/* 背景媒体 */}
-      {visual.file && (
+      {mediaSrc && (
         <AbsoluteFill
           style={{
             ...animationStyle,
@@ -54,7 +58,7 @@ export const ActionScene: React.FC<ActionSceneProps> = ({
         >
           {isVideo ? (
             <Video
-              src={visual.file}
+              src={mediaSrc}
               style={{
                 width: "100%",
                 height: "100%",
@@ -63,7 +67,7 @@ export const ActionScene: React.FC<ActionSceneProps> = ({
             />
           ) : (
             <Img
-              src={visual.file}
+              src={mediaSrc}
               style={{
                 width: "100%",
                 height: "100%",

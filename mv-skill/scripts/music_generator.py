@@ -97,7 +97,7 @@ class MusicGenerator:
                 "duration": 时长
             }
         """
-        path = Path(music_path)
+        path = Path(music_path).resolve()
         if not path.exists():
             raise MusicGenerationError(f"音乐文件不存在: {music_path}")
 

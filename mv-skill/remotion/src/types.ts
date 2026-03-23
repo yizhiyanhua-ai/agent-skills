@@ -10,30 +10,47 @@ export interface Storyboard {
 
 export interface Meta {
   title: string;
-  style: "anime-hype" | "cyberpunk" | "lyric";
+  style: string;  // "anime-hype" | "cyberpunk" | "lyric" | "medley-*"
   duration: number;
   resolution: string;
   fps: number;
+  type?: "single" | "medley";
+  song_count?: number;
 }
 
 export interface Music {
-  source: "suno" | "local" | "none";
+  source: "suno" | "local" | "none" | "medley";
   prompt?: string;
   file: string | null;
   bpm: number | null;
   beats: number[];
+  segments?: MusicSegment[];
+}
+
+export interface MusicSegment {
+  keyword: string;
+  duration: number;
 }
 
 export interface Scene {
   id: string;
   start: number;
   end: number;
-  type: "title" | "action" | "transition" | "lyrics";
+  type: "title" | "action" | "transition" | "lyrics" | "dj" | "video_mix";
   content?: SceneContent;
   visual: Visual;
   animation: AnimationType;
   transition?: TransitionType;
   beat_sync?: boolean;
+  metadata?: SceneMetadata;
+}
+
+export interface SceneMetadata {
+  segment_index?: number;
+  song_keyword?: string;
+  video_category?: string;
+  scene_index?: number;
+  dj_visual_type?: string;
 }
 
 export interface SceneContent {
@@ -43,13 +60,27 @@ export interface SceneContent {
 }
 
 export interface Visual {
-  source: "auto" | "ai" | "stock" | "user";
+  source: "auto" | "ai" | "stock" | "user" | "programmatic" | "video";
   prompt?: string;
   stock_keywords?: string[];
   quality_priority?: "high" | "medium" | "low";
   allow_ai_fallback?: boolean;
   file: string | null;
   media_type?: "image" | "video";
+  // DJ scene properties
+  visual_type?: string;
+  color_scheme?: ColorScheme;
+  intensity?: number;
+  // Video mix scene properties
+  video_category?: string;
+  overlay_effect?: string;
+}
+
+export interface ColorScheme {
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
 }
 
 export type AnimationType =

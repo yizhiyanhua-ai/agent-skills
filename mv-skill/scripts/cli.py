@@ -99,10 +99,26 @@ def create_parser() -> argparse.ArgumentParser:
     )
     full_parser.add_argument("--lyrics", nargs="+", help="歌词列表")
     full_parser.add_argument("--music", help="本地音乐文件路径")
+    full_parser.add_argument("--search-music", help="搜索并下载音乐（关键词）")
     full_parser.add_argument("--skip-preview", action="store_true", help="跳过预览确认")
 
     # status 命令
     status_parser = subparsers.add_parser("status", help="检查环境状态")
+
+    # medley 命令（歌曲串烧）
+    medley_parser = subparsers.add_parser("medley", help="生成歌曲串烧短视频")
+    medley_parser.add_argument("--theme", default="nostalgic", help="串烧主题 (nostalgic/anime-battle/emotional)")
+    medley_parser.add_argument("--songs", nargs="+", help="歌曲关键词列表")
+    medley_parser.add_argument("--title", help="串烧标题")
+    medley_parser.add_argument(
+        "--duration",
+        type=int,
+        default=45,
+        help="总时长（秒）",
+    )
+    medley_parser.add_argument("--auto", action="store_true", help="自动选择歌曲")
+    medley_parser.add_argument("--count", type=int, default=4, help="自动选择歌曲数量")
+    medley_parser.add_argument("--skip-preview", action="store_true", help="跳过预览确认")
 
     return parser
 
@@ -253,6 +269,18 @@ def cmd_full(args) -> str:
     print(f"  MV Skill - 完整制作流程")
     print("=" * 60)
 
+    # 0. 搜索并下载音乐（如果指定）
+    if hasattr(args, 'search_music') and args.search_music:
+        print(f"\n[Step 0/4] 搜索并下载音乐: {args.search_music}")
+        from scripts.music_downloader import MusicDownloader
+        downloader = MusicDownloader()
+        music_path = downloader.search_and_download(args.search_music)
+        if music_path:
+            args.music = str(music_path)
+            print(f"  音乐已下载: {music_path}")
+        else:
+            print("  ⚠️ 音乐搜索失败，将继续但无背景音乐")
+
     # 1. 生成分镜
     print("\n[Step 1/4] 生成分镜脚本")
     args.output = None
@@ -388,6 +416,99 @@ def load_style_config(style: str) -> dict:
     return {}
 
 
+def cmd_medley(args) -> str:
+    """生成歌曲串烧"""
+    from scripts.medley_generator import MedleyGenerator
+
+    print("=" * 60)
+    print("  MV Skill - 歌曲串烧生成")
+    print("=" * 60)
+
+    # 初始化生成器
+    generator = MedleyGenerator(theme=args.theme)
+
+    # 添加歌曲
+    if args.auto:
+        generator.auto_select_songs(count=args.count)
+    elif args.songs:
+        for song in args.songs:
+            generator.add_song(song)
+    else:
+        print("❌ 请指定歌曲 (--songs) 或使用自动选择 (--auto)")
+        return None
+
+    # 生成分镜脚本
+    storyboard = generator.generate(
+        total_duration=args.duration,
+        title=args.title,
+    )
+
+    # 保存分镜脚本
+    title = storyboard["meta"]["title"]
+    storyboard_path = CACHE_DIR / f"{title}_storyboard.yaml"
+    with open(storyboard_path, "w", encoding="utf-8") as f:
+        yaml.dump(storyboard, f, allow_unicode=True, default_flow_style=False)
+    print(f"\n[MedleyGenerator] 分镜脚本已保存: {storyboard_path}")
+
+    # 获取素材 - 根据场景类型选择不同的获取方式
+    print("\n[Step] 获取素材...")
+    style_config = load_medley_style_config(args.theme)
+
+    # 检查是否使用视频混剪模式
+    use_video_mix = style_config.get("use_video_mix", False)
+    scenes = storyboard.get("scenes", [])
+
+    if use_video_mix:
+        # 使用视频素材获取器
+        print("[Step] 使用视频混剪模式...")
+        try:
+            from scripts.video_asset_fetcher import VideoAssetFetcher
+            video_fetcher = VideoAssetFetcher()
+            assets = video_fetcher.fetch_videos_for_scenes(scenes)
+        except Exception as e:
+            print(f"[Warning] 视频获取失败，回退到程序化模式: {e}")
+            # 回退到程序化模式
+            assets = {scene["id"]: "programmatic" for scene in scenes}
+    else:
+        # 使用普通素材管理器
+        asset_manager = AssetManager(style_config=style_config)
+        assets = asset_manager.fetch_all_assets(storyboard)
+
+    # 预览
+    if not args.skip_preview:
+        print("\n[Step] 生成预览...")
+        preview_gen = PreviewGenerator()
+        preview = preview_gen.generate_storyboard_preview(storyboard, assets)
+        print(preview)
+
+        failed = [k for k, v in assets.items() if not v]
+        if failed:
+            print(f"\n⚠️  以下场景素材获取失败: {failed}")
+
+    # 渲染
+    print("\n[Step] 渲染视频...")
+    renderer = Renderer()
+    output_path = renderer.render(storyboard, assets)
+
+    print("\n" + "=" * 60)
+    print("  串烧制作完成!")
+    print(f"  输出: {output_path}")
+    print("=" * 60)
+
+    return output_path
+
+
+def load_medley_style_config(theme: str) -> dict:
+    """加载串烧主题配置"""
+    from scripts.config import TEMPLATES_DIR
+
+    template_path = TEMPLATES_DIR / "medley" / f"{theme}.yaml"
+    if template_path.exists():
+        with open(template_path, "r", encoding="utf-8") as f:
+            return yaml.safe_load(f)
+    return {}
+
+
 def main():
     """主入口"""
     parser = create_parser()
@@ -410,6 +531,8 @@ def main():
             cmd_full(args)
         elif args.command == "status":
             cmd_status(args)
+        elif args.command == "medley":
+            cmd_medley(args)
         else:
             parser.print_help()
             return 1

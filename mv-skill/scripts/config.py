@@ -58,7 +58,7 @@ TIMEOUTS = {
     "image_generation": 60,
     "asset_download": 30,
     "render_per_scene": 60,
-    "total_render": 600,
+    "total_render": 1800,  # 30 分钟，支持长视频渲染
 }
 
 # 素材源优先级
