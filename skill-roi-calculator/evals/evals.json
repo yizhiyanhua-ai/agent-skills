@@ -1,0 +1,23 @@
+{
+  "skill_name": "skill-roi-calculator",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我们花了2周时间（3个人）开发了一个代码审查 Skill，现在已经用了3个月了，团队15个人每天用2次，每次大概能省10分钟。我们的平均时薪大概是200元。帮我算一下 ROI 值不值。",
+      "expected_output": "完整 ROI 报告：计算开发成本、3个月收益、ROI 百分比、回本周期，并给出评级和建议",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我想向老板申请开发一个销售话术 Skill，开发需要销售总监配合8小时、技术开发20小时，预计有50个销售用，每人每天用3次，每次节省5分钟写邮件的时间。帮我算 ROI 并生成一份可以给老板看的报告。",
+      "expected_output": "ROI 预测报告，格式适合向管理层汇报，包含清晰的投入产出对比和回本时间",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I need to compare two Skill projects: Skill A costs $2000 to build, saves 5 min per use, 100 uses/month. Skill B costs $5000, saves 20 min per use, 50 uses/month. Our average hourly rate is $50. Which one should I build first?",
+      "expected_output": "Side-by-side ROI comparison with recommendation on which to build first",
+      "files": []
+    }
+  ]
+}

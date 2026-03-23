@@ -1,0 +1,23 @@
+{
+  "skill_name": "mv-skill",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我做一个热血动漫风格的 MV，主题是程序员深夜 debug，背景音乐要紧张刺激",
+      "expected_output": "生成分镜预览，包含场景描述、时长分配、音乐风格建议，最终输出 MP4 文件路径",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I want to create a music video about my startup journey, cyberpunk style, around 60 seconds",
+      "expected_output": "Storyboard preview with scene breakdown, music generation prompt, final MP4 output",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "用我自己的音乐文件 /tmp/my_song.mp3 做一个抒情风格的 MV，歌词是'在代码的海洋里寻找诗意'",
+      "expected_output": "使用本地音乐文件，分析 BPM，生成匹配分镜，输出 MP4",
+      "files": []
+    }
+  ]
+}
