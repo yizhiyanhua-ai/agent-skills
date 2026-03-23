@@ -1,0 +1,23 @@
+{
+  "skill_name": "skill-adoption-planner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我们公司有300人，分为研发(80人)、产品(30人)、销售(100人)、运营(50人)、行政(40人)。我已经在研发部推广了 Claude Code，效果很好，现在想推广到全公司。但销售部门经理说'这玩意儿跟我们没关系'，行政部门说'太复杂学不会'。帮我制定一个3个月的推广计划。",
+      "expected_output": "分阶段推广计划，针对各部门特点定制策略，包含阻力应对方案和成功指标",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我是一家50人创业公司的CTO，想在下个季度把 AI Skill 工具推广给全员，但我们没有专门的培训预算，员工平均工作量已经很大了。给我一个低成本、高效率的推广方案。",
+      "expected_output": "低成本推广方案，包含种子用户策略、自传播机制和渐进式推广路径",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "We've been trying to roll out AI skills to our 200-person marketing and content team for 2 months, but adoption is stuck at 20%. People say they don't have time to learn and aren't sure it's reliable. What's our next move?",
+      "expected_output": "Adoption recovery plan addressing the specific resistance points (time, reliability), with concrete next steps",
+      "files": []
+    }
+  ]
+}

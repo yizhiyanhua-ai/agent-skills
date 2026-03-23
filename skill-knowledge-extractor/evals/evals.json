@@ -1,0 +1,23 @@
+{
+  "skill_name": "skill-knowledge-extractor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我是一个有10年经验的产品经理，我来说说我做需求评审的方法，帮我把这个经验提炼成一个可复用的 Skill：我通常先用5分钟了解背景，然后问'用户是谁'、'痛点是什么'、'为什么现在做'，接着评估技术可行性和优先级，最后确认验收标准。",
+      "expected_output": "提取出需求评审 Skill 草稿，包含触发场景、步骤模板、关键问题清单",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "这是我们客服团队处理退款投诉的对话记录（模拟）：客户：我要退款！客服：非常抱歉，能告诉我订单号吗？客户：12345，质量太差了。客服：了解了，我们这边立即为您处理，同时送您一张优惠券。帮我从中提取标准化的投诉处理流程 Skill。",
+      "expected_output": "生成投诉处理 Skill 草稿，包含开场安抚、信息收集、解决方案、补偿策略等模式",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Extract knowledge from my debugging process: I always start by reproducing the bug locally, then check logs for error messages, then isolate the component, then write a minimal test case, then fix and verify. Turn this into a reusable debugging skill.",
+      "expected_output": "Debugging skill draft with clear steps, decision points, and examples",
+      "files": []
+    }
+  ]
+}
