@@ -240,9 +240,12 @@ class StoryboardGenerator:
         # 映射 section_type 到 prompt 类别
         prompt_category_map = {
             "intro": "intro",
+            "intro_action": "hero",
             "buildup": "hero",
+            "pre_climax": "power_up",
             "climax": "battle",
             "bridge": "emotional",
+            "final_burst": "battle",
             "finale": "victory",
         }
         category = prompt_category_map.get(section_type, "hero")
@@ -261,9 +264,12 @@ class StoryboardGenerator:
         # 根据 section_type 添加特定关键词
         section_keywords = {
             "intro": ["cosmos", "galaxy", "title", "opening"],
+            "intro_action": ["hero", "action", "dynamic", "energy"],
             "buildup": ["hero", "warrior", "rising", "energy"],
+            "pre_climax": ["power", "energy", "charging", "aura"],
             "climax": ["battle", "explosion", "action", "impact"],
             "bridge": ["peaceful", "stars", "emotional", "hope"],
+            "final_burst": ["explosion", "victory", "power", "climax"],
             "finale": ["victory", "sunrise", "triumphant", "ending"],
         }
 

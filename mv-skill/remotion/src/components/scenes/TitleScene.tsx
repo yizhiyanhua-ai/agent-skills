@@ -6,6 +6,7 @@ import {
   useVideoConfig,
   interpolate,
   spring,
+  staticFile,
 } from "remotion";
 import { Visual, AnimationType, StyleConfig } from "../../types";
 import { applyAnimation } from "../animations/animationUtils";
@@ -54,13 +55,16 @@ export const TitleScene: React.FC<TitleSceneProps> = ({
   // 背景动画
   const bgStyle = applyAnimation(animation, frame, fps, durationInFrames);
 
+  // 获取媒体文件路径
+  const mediaSrc = visual.file ? staticFile(visual.file) : null;
+
   return (
     <AbsoluteFill>
       {/* 背景图像 */}
-      {visual.file && (
+      {mediaSrc && (
         <AbsoluteFill style={bgStyle}>
           <Img
-            src={visual.file}
+            src={mediaSrc}
             style={{
               width: "100%",
               height: "100%",

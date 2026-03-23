@@ -131,41 +131,68 @@ structure:
 
   sections:
     - type: "intro"
-      duration: 5
+      duration: 3
       description: "标题展示，宇宙/能量背景"
       scene_type: "title"
       animation: "zoom-in"
       transition: "flash"
 
+    - type: "intro_action"
+      duration: 4
+      description: "开场动作镜头"
+      scene_count: 2
+      scene_type: "action"
+      animations: ["zoom-in", "pan-right"]
+      transitions: ["flash", "cross-fade"]
+      beat_sync: true
+
     - type: "buildup"
-      duration: 15
+      duration: 12
       description: "角色/场景快速切换，能量积蓄"
+      scene_count: 6
+      scene_type: "action"
+      animations: ["shake", "zoom-in", "pan-left", "zoom-out", "pan-right", "shake"]
+      transitions: ["cross-fade", "flash", "wipe-diagonal", "flash", "cross-fade", "impact-frame"]
+      beat_sync: true
+
+    - type: "pre_climax"
+      duration: 5
+      description: "高潮前的蓄力"
       scene_count: 3
       scene_type: "action"
-      animations: ["shake", "zoom-in", "pan-left"]
-      transitions: ["cross-fade", "flash"]
+      animations: ["zoom-in", "shake", "speed-lines"]
+      transitions: ["flash", "impact-frame", "flash"]
       beat_sync: true
 
     - type: "climax"
-      duration: 20
+      duration: 15
       description: "高潮段落，密集剪辑，特效叠加"
-      scene_count: 4
+      scene_count: 8
       scene_type: "action"
-      animations: ["shake", "speed-lines", "flash"]
-      transitions: ["flash", "impact-frame"]
+      animations: ["shake", "speed-lines", "flash", "zoom-in", "shake", "pan-left", "speed-lines", "flash"]
+      transitions: ["flash", "impact-frame", "flash", "wipe-diagonal", "impact-frame", "flash", "cross-fade", "flash"]
       beat_sync: true
 
     - type: "bridge"
-      duration: 10
+      duration: 8
       description: "情感段落，节奏稍缓"
-      scene_count: 2
+      scene_count: 4
       scene_type: "action"
-      animations: ["ken-burns", "zoom-out"]
-      transitions: ["fade", "cross-fade"]
+      animations: ["ken-burns", "zoom-out", "pan-right", "ken-burns"]
+      transitions: ["fade", "cross-fade", "fade", "cross-fade"]
       beat_sync: false
 
-    - type: "finale"
+    - type: "final_burst"
       duration: 5
+      description: "最后爆发"
+      scene_count: 3
+      scene_type: "action"
+      animations: ["shake", "speed-lines", "flash"]
+      transitions: ["impact-frame", "flash", "flash"]
+      beat_sync: true
+
+    - type: "finale"
+      duration: 3
       description: "终结 pose，标题再现"
       scene_type: "title"
       animation: "zoom-out"

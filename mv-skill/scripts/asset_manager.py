@@ -71,6 +71,10 @@ class AssetManager:
         visual = scene.get("visual", {})
         source = visual.get("source", "auto")
 
+        # DJ 场景是程序化生成的，不需要素材
+        if source == "programmatic" or scene.get("type") == "dj":
+            return "programmatic"
+
         # 用户指定了文件
         if source == "user" and visual.get("file"):
             return self._validate_user_asset(visual["file"])
@@ -90,8 +94,18 @@ class AssetManager:
         """自动模式：素材库优先，AI 兜底"""
         quality_priority = visual.get("quality_priority", "high")
         allow_ai_fallback = visual.get("allow_ai_fallback", True)
+        prefer_video = visual.get("prefer_video", False)
 
-        # 第一步：尝试素材库
+        # 第一步：如果偏好视频，先尝试获取视频
+        if prefer_video and self.has_media_downloader:
+            try:
+                result = self._fetch_stock_asset(visual, scene_id, media_type="video")
+                if result:
+                    return result
+            except (AssetNotFoundError, AssetQualityError) as e:
+                print(f"[AssetManager] 视频素材未找到，尝试图片: {e}")
+
+        # 第二步：尝试素材库（图片）
         if self.has_media_downloader:
             try:
                 result = self._fetch_stock_asset(visual, scene_id)
@@ -123,6 +137,7 @@ class AssetManager:
         visual: Dict,
         scene_id: str,
         strict_quality: bool = True,
+        media_type: str = None,
     ) -> str:
         """从素材库获取素材"""
         if not self.has_media_downloader:
@@ -136,7 +151,10 @@ class AssetManager:
         if not keywords:
             raise AssetNotFoundError("没有可用的搜索关键词")
 
-        media_type = visual.get("media_type", "image")
+        # 确定媒体类型
+        if media_type is None:
+            media_type = visual.get("media_type", "image")
+
         output_dir = self.cache_dir / scene_id
         output_dir.mkdir(exist_ok=True)
 

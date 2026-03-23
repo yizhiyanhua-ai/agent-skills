@@ -9,6 +9,8 @@ import {
 } from "remotion";
 import { TitleScene } from "../components/scenes/TitleScene";
 import { ActionScene } from "../components/scenes/ActionScene";
+import { DJScene } from "../components/scenes/DJScene";
+import { VideoMixScene } from "../components/scenes/VideoMixScene";
 import { TransitionOverlay } from "../components/effects/TransitionOverlay";
 import { Scene, Storyboard } from "../types";
 
@@ -91,6 +93,53 @@ const SceneRenderer: React.FC<SceneRendererProps> = ({
         />
       );
 
+    case "dj":
+      return (
+        <DJScene
+          visualType={scene.visual?.visual_type || "waveform"}
+          colorScheme={scene.visual?.color_scheme || {
+            primary: "#FF00FF",
+            secondary: "#00FFFF",
+            accent: "#FFFF00",
+            background: "#0a0a0f",
+          }}
+          intensity={scene.visual?.intensity || 1}
+          songTitle={scene.metadata?.song_keyword}
+        />
+      );
+
+    case "video_mix":
+      // 如果没有视频文件，回退到 DJ 程序化场景
+      if (!scene.visual?.file) {
+        return (
+          <DJScene
+            visualType={scene.visual?.visual_type || "waveform"}
+            colorScheme={scene.visual?.color_scheme || {
+              primary: "#FF00FF",
+              secondary: "#00FFFF",
+              accent: "#FFFF00",
+              background: "#0a0a0f",
+            }}
+            intensity={scene.visual?.intensity || 1}
+            songTitle={scene.metadata?.song_keyword}
+          />
+        );
+      }
+      return (
+        <VideoMixScene
+          videoSrc={staticFile(scene.visual.file)}
+          colorScheme={scene.visual?.color_scheme || {
+            primary: "#FF00FF",
+            secondary: "#00FFFF",
+            accent: "#FFFF00",
+            background: "#0a0a0f",
+          }}
+          intensity={scene.visual?.intensity || 1}
+          overlayEffect={scene.visual?.overlay_effect || "flash"}
+          songTitle={scene.metadata?.song_keyword}
+        />
+      );
+
     case "action":
     case "lyrics":
     default:
@@ -144,7 +193,32 @@ function getStyleConfig(style: string): StyleConfig {
       textColor: "#ffffff",
       fontFamily: "Noto Serif SC, serif",
     },
+    "medley-dj-remix": {
+      background: "#0a0a0f",
+      primaryColor: "#FF00FF",
+      secondaryColor: "#00FFFF",
+      accentColor: "#FFFF00",
+      textColor: "#ffffff",
+      fontFamily: "Orbitron, sans-serif",
+    },
   };
+
+  // 支持 medley-* 风格
+  if (style.startsWith("medley-")) {
+    const medleyStyle = style.replace("medley-", "");
+    if (configs[`medley-${medleyStyle}`]) {
+      return configs[`medley-${medleyStyle}`];
+    }
+    // 默认 medley 风格
+    return {
+      background: "#0D0D0D",
+      primaryColor: "#FF4500",
+      secondaryColor: "#FFD700",
+      accentColor: "#1E90FF",
+      textColor: "#FFFFFF",
+      fontFamily: "Noto Sans SC, sans-serif",
+    };
+  }
 
   return configs[style] || configs["anime-hype"];
 }

@@ -1,23 +1,32 @@
-import { Composition } from "remotion";
+import { Composition, getInputProps } from "remotion";
 import { MVComposition } from "./compositions/MVComposition";
+import { Storyboard } from "./types";
 
 export const RemotionRoot: React.FC = () => {
+  // 从命令行获取 props
+  const inputProps = getInputProps() as Partial<Storyboard>;
+  const duration = inputProps?.meta?.duration || 55;
+  const fps = inputProps?.meta?.fps || 30;
+  const resolution = inputProps?.meta?.resolution || "1080x1920";
+  const [width, height] = resolution.split("x").map(Number);
+
   return (
     <>
       <Composition
         id="MVComposition"
-        component={MVComposition}
-        durationInFrames={30 * 55} // 55 seconds at 30fps
-        fps={30}
-        width={1080}
-        height={1920}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        component={MVComposition as any}
+        durationInFrames={fps * duration}
+        fps={fps}
+        width={width || 1080}
+        height={height || 1920}
         defaultProps={{
           meta: {
             title: "MV Preview",
             style: "anime-hype",
-            duration: 55,
-            resolution: "1080x1920",
-            fps: 30,
+            duration: duration,
+            resolution: resolution,
+            fps: fps,
           },
           music: {
             source: "none",

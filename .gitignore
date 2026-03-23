@@ -76,3 +76,8 @@ wheels/
 
 # Worktrees
 .worktrees/
+node_modules/
+.cache/
+*.zip
+*.jpg
+*.png
