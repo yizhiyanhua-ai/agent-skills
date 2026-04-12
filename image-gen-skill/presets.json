@@ -1,0 +1,10 @@
+{
+  "moxi": {
+    "description": "墨线图 — 黑白印刷专用技术书插图风格",
+    "size": "2048x2048",
+    "quality": "high",
+    "model": "gemini-3.1-flash-image-preview",
+    "style_prefix": "Black and white technical textbook illustration for print publication. Style name: 墨线图 (Moxi). Pure monochrome — exactly 5 tonal levels: #FFFFFF (white), #E0E0E0 (light gray), #A0A0A0 (medium gray), #404040 (dark gray), #000000 (black). No color whatsoever. Thick 3px black lines for all borders. Clean white background. High contrast, no gradients, no decorative elements, no shadows. Shape encoding: rectangles = tasks/content, rounded rectangles = results/output, diamonds = decisions, circles = people/roles. Line encoding: solid 3px = main flow, dashed 2px = optional/alternative, dotted 1px = dependency/reference. Fill encoding: white = normal, light gray = emphasis, dark gray = header/label, black with white text = critical/warning. Maximum 7 visual elements per diagram. All spacing between elements no less than 1/3 of element width. All Chinese characters bold, crisp, minimum equivalent to 10pt print size.",
+    "style_suffix": "Technical manual illustration. Print-ready monochrome. 墨线图 style: ink, lines, truth. No artistic flourishes — every stroke carries information. Aspect ratio flexible: use landscape for flow diagrams, square for comparison charts."
+  }
+}
